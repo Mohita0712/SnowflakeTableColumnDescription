@@ -39,7 +39,7 @@ try {
 
         var fullTableName = `"${DB_NAME}"."${SCHEMA_NAME}"."${tableName}"`;
 
-        // 1️⃣ Apply table-level comment
+        // Apply table-level comment
         if (tableDesc) {
             try {
                 var commentTableSQL = `COMMENT ON TABLE ${fullTableName} IS ?`;
@@ -55,7 +55,7 @@ try {
                     binds: [DB_NAME, SCHEMA_NAME, tableName, null, tableDesc, ''TABLE_DESC'', ''SUCCESS'', null]
                 }).execute();
 
-                results.push(`✅ Table comment applied: ${fullTableName}`);
+                results.push(`Table comment applied: ${fullTableName}`);
             } catch (err) {
                 var errorMsg = err.toString().substring(0, 500);
                 snowflake.createStatement({
@@ -67,11 +67,11 @@ try {
                     binds: [DB_NAME, SCHEMA_NAME, tableName, null, tableDesc, ''TABLE_DESC'', ''ERROR'', errorMsg]
                 }).execute();
 
-                results.push(`❌ Error applying table comment: ${fullTableName} - ${errorMsg}`);
+                results.push(`Error applying table comment: ${fullTableName} - ${errorMsg}`);
             }
         }
 
-        // 2️⃣ Apply column-level comments
+        // Apply column-level comments
         if (columnDescJSON && columnDescJSON.COLUMNS && Array.isArray(columnDescJSON.COLUMNS)) {
             for (var i = 0; i < columnDescJSON.COLUMNS.length; i++) {
                 var col = columnDescJSON.COLUMNS[i];
@@ -93,7 +93,7 @@ try {
                             binds: [DB_NAME, SCHEMA_NAME, tableName, col.name, col.description, ''COLUMN_DESC'', ''SUCCESS'', null]
                         }).execute();
 
-                        results.push(`✅ Column comment applied: ${fullColumnName}`);
+                        results.push(`Column comment applied: ${fullColumnName}`);
                     } catch (err) {
                         var errorMsg = err.toString().substring(0, 500);
                         snowflake.createStatement({
@@ -105,7 +105,7 @@ try {
                             binds: [DB_NAME, SCHEMA_NAME, tableName, col.name, col.description, ''COLUMN_DESC'', ''ERROR'', errorMsg]
                         }).execute();
 
-                        results.push(`❌ Error applying column comment: ${fullColumnName} - ${errorMsg}`);
+                        results.push(`Error applying column comment: ${fullColumnName} - ${errorMsg}`);
                     }
                 }
             }
